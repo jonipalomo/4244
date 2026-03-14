@@ -19,7 +19,7 @@ h1{
 margin-top:30px;
 }
 
-img.logo{
+.logo{
 margin:20px;
 border-radius:10px;
 }
@@ -37,7 +37,7 @@ background:white;
 padding:20px;
 border-radius:10px;
 box-shadow:0 4px 10px rgba(0,0,0,0.1);
-width:200px;
+width:220px;
 }
 
 .tarjeta img{
@@ -48,6 +48,10 @@ margin-top:10px;
 text-decoration:none;
 color:#0077cc;
 font-weight:bold;
+}
+
+.tarjeta a:hover{
+color:#005fa3;
 }
 
 </style>
@@ -70,23 +74,27 @@ fetch(url)
 .then(res => res.text())
 .then(data => {
 
-const filas = data.trim().split("\n");
+const filas = data.split("\n");
 const contenedor = document.getElementById("lista");
 
 filas.slice(1).forEach(fila => {
 
-const columnas = fila.split(",");
+let columnas = fila.split(",");
 
-const titulo = columnas[0];
-const link = columnas[1];
+if(columnas.length < 3) return;
 
-if(titulo && link){
+let titulo = columnas[0].replace(/"/g,"").trim();
+let link = columnas[1].replace(/"/g,"").trim();
+let activo = columnas[2].replace(/"/g,"").trim();
 
-const qr = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(link);
+if(activo === "TRUE"){
 
-contenedor.innerHTML += `
-<div class="tarjeta">
+let qr = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(link);
 
+let tarjeta = document.createElement("div");
+tarjeta.className = "tarjeta";
+
+tarjeta.innerHTML = `
 <h3>${titulo}</h3>
 
 <a href="${link}" target="_blank">Abrir enlace</a>
@@ -94,9 +102,9 @@ contenedor.innerHTML += `
 <br><br>
 
 <img src="${qr}" width="150">
-
-</div>
 `;
+
+contenedor.appendChild(tarjeta);
 
 }
 
