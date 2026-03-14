@@ -1,16 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Mi primera página</title>
+<meta charset="UTF-8">
+<title>Mis enlaces</title>
 </head>
 
 <body>
 
-<h1>Hola mundo</h1>
+<h1>Mis enlaces</h1>
 
-<p>Esta es mi primera página subida a GitHub</p>
+<ul id="lista"></ul>
 
-<img src="image.jpg" width="300">
+<script>
+
+const url = "https://docs.google.com/spreadsheets/d/1rYgE9eltlWUaCED98TPYKmgVCYHoLhRZ8CG2WgSvtT0/edit?usp=sharing";
+
+fetch(url)
+  .then(res => res.text())
+  .then(data => {
+
+    const filas = data.split("\n");
+    const lista = document.getElementById("lista");
+
+    filas.slice(1).forEach(fila => {
+
+      const columnas = fila.split(",");
+
+      const titulo = columnas[0];
+      const link = columnas[1];
+
+      lista.innerHTML += `
+        <li>
+          <a href="${link}" target="_blank">${titulo}</a>
+        </li>
+      `;
+
+    });
+
+  });
+
+</script>
 
 </body>
 </html>
