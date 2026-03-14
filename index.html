@@ -25,10 +25,15 @@
       background: var(--bg);
       color: var(--ink);
       min-height: 100vh;
+      padding-top: var(--header-h);
     }
 
-    /* ── HEADER ── */
     header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
       position: relative;
       width: 100%;
       height: var(--header-h);
@@ -39,22 +44,16 @@
       justify-content: center;
     }
 
-    /* textura de fondo sutil */
     header::before {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 40px,
-          rgba(255,255,255,0.02) 40px,
-          rgba(255,255,255,0.02) 80px
-        );
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 40px,
+        rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px
+      );
     }
 
-    /* franja de acento lateral */
     header::after {
       content: '';
       position: absolute;
@@ -74,8 +73,7 @@
     }
 
     .header-avatar {
-      width: 110px;
-      height: 110px;
+      width: 110px; height: 110px;
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid var(--accent);
@@ -83,10 +81,8 @@
       box-shadow: 0 0 0 6px rgba(200,90,42,0.15);
     }
 
-    /* fallback si la imagen no carga */
     .header-avatar-placeholder {
-      width: 110px;
-      height: 110px;
+      width: 110px; height: 110px;
       border-radius: 50%;
       border: 3px solid var(--accent);
       flex-shrink: 0;
@@ -95,11 +91,7 @@
       align-items: center;
       justify-content: center;
       font-size: 42px;
-      color: var(--accent);
-      box-shadow: 0 0 0 6px rgba(200,90,42,0.15);
     }
-
-    .header-text { text-align: left; }
 
     .header-text h1 {
       font-family: 'DM Serif Display', serif;
@@ -109,10 +101,7 @@
       letter-spacing: -0.02em;
     }
 
-    .header-text h1 em {
-      color: var(--accent);
-      font-style: italic;
-    }
+    .header-text h1 em { color: var(--accent); font-style: italic; }
 
     .header-text p {
       margin-top: 8px;
@@ -123,14 +112,46 @@
       text-transform: uppercase;
     }
 
-    /* ── MAIN ── */
+    .header-refresh {
+      position: absolute;
+      bottom: 16px; right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.04em;
+    }
+
+    .refresh-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    .refresh-dot.pulsing { animation: pulse-dot 1s ease-out; }
+
+    .refresh-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .refresh-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      opacity: 0.6;
+    }
+
     main {
       max-width: 1100px;
       margin: 0 auto;
       padding: 48px 24px 80px;
     }
 
-    /* ── ESTADO ── */
     #estado {
       text-align: center;
       color: var(--muted);
@@ -148,14 +169,12 @@
       margin: 0 auto 16px;
     }
 
-    /* ── GRILLA ── */
     #lista {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
       gap: 24px;
     }
 
-    /* ── TARJETA ── */
     .tarjeta {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -185,12 +204,7 @@
       transition: transform 0.3s ease;
     }
 
-    .tarjeta:hover {
-      box-shadow: 0 12px 40px rgba(0,0,0,0.10);
-      transform: translateY(-4px);
-      border-color: transparent;
-    }
-
+    .tarjeta:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.10); transform: translateY(-4px); border-color: transparent; }
     .tarjeta:hover::before { transform: scaleX(1); }
 
     .tarjeta-titulo {
@@ -201,8 +215,7 @@
     }
 
     .tarjeta-qr {
-      width: 150px;
-      height: 150px;
+      width: 150px; height: 150px;
       border-radius: 10px;
       border: 1px solid var(--border);
       display: block;
@@ -223,14 +236,8 @@
       transition: background 0.2s, transform 0.15s;
     }
 
-    .tarjeta-btn:hover {
-      background: var(--accent);
-      transform: scale(1.04);
-    }
+    .tarjeta-btn:hover { background: var(--accent); transform: scale(1.04); }
 
-    .tarjeta-btn svg { flex-shrink: 0; }
-
-    /* ── FOOTER ── */
     footer {
       text-align: center;
       padding: 24px;
@@ -239,47 +246,57 @@
       border-top: 1px solid var(--border);
     }
 
-    /* ── ANIMACIONES ── */
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-16px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* debug panel */
+    #debug {
+      display: none;
+      background: #1a1814;
+      color: #c8f0a0;
+      font-family: monospace;
+      font-size: 0.75rem;
+      padding: 16px 24px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 200px;
+      overflow-y: auto;
     }
 
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp   { to   { opacity:1; transform:translateY(0); } }
+    @keyframes spin     { to   { transform:rotate(360deg); } }
+    @keyframes pulse-dot { 0% { opacity:1; transform:scale(1.8); } 100% { opacity:0.5; transform:scale(1); } }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ── RESPONSIVE ── */
     @media (max-width: 520px) {
-      .header-inner { flex-direction: column; text-align: center; gap: 16px; padding: 0 24px; }
-      .header-text { text-align: center; }
+      .header-inner { flex-direction:column; text-align:center; gap:16px; padding:0 24px; }
       :root { --header-h: 320px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
     <div class="header-inner">
       <img
         class="header-avatar"
         src="image.jpg"
         alt="Avatar"
-        onerror="this.replaceWith(Object.assign(document.createElement('div'), {className:'header-avatar-placeholder', textContent:'👤'}))"
+        onerror="this.replaceWith(Object.assign(document.createElement('div'), {className:'header-avatar-placeholder', textContent:'📚'}))"
       >
       <div class="header-text">
         <h1>Mis <em>enlaces</em></h1>
         <p>Recursos y herramientas digitales</p>
       </div>
     </div>
+    <div class="refresh-bar">
+      <div class="refresh-bar-fill" id="barraProgreso"></div>
+    </div>
+    <div class="header-refresh">
+      <div class="refresh-dot" id="refreshDot"></div>
+      <span id="refreshLabel">Cargando…</span>
+    </div>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <pre id="debug"></pre>
+
   <main>
     <div id="estado">
       <div class="spinner"></div>
@@ -289,72 +306,158 @@
   </main>
 
   <footer>
-    Actualizado automáticamente desde Google Sheets
+    Actualizado automáticamente desde Google Sheets · cada 1 minuto
   </footer>
 
   <script>
-    const sheetCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyIiVfVXUrDd9siaOe8XwKpAwjQToL8M7gq98sFQqH7vp0-Cr4ulaFYwz2-kvWOeDEzE1Nb98qKCy8/pub?output=csv";
+    const sheetCSV     = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyIiVfVXUrDd9siaOe8XwKpAwjQToL8M7gq98sFQqH7vp0-Cr4ulaFYwz2-kvWOeDEzE1Nb98qKCy8/pub?output=csv";
+    const INTERVALO_MS = 60 * 1000;
 
-    const estado     = document.getElementById("estado");
-    const contenedor = document.getElementById("lista");
+    const estado        = document.getElementById("estado");
+    const contenedor    = document.getElementById("lista");
+    const refreshDot    = document.getElementById("refreshDot");
+    const refreshLabel  = document.getElementById("refreshLabel");
+    const barraProgreso = document.getElementById("barraProgreso");
+    const debug         = document.getElementById("debug");
 
-    estado.style.display = "block";
+    // ── Parser CSV robusto (RFC 4180) ─────────────────────────────────────────
+    // Maneja: comas dentro de comillas, saltos de línea, comillas escapadas
+    function parsearCSV(texto) {
+      const filas = [];
+      let fila = [], campo = "", dentroComillas = false;
 
-    fetch(sheetCSV)
-      .then(res => {
-        if (!res.ok) throw new Error("Error al cargar el CSV");
-        return res.text();
-      })
-      .then(data => {
-        estado.style.display = "none";
+      for (let i = 0; i < texto.length; i++) {
+        const c  = texto[i];
+        const sig = texto[i + 1];
 
-        const filas = data.split("\n").slice(1); // saltar encabezado si existe
-
-        let agregados = 0;
-
-        filas.forEach((fila, i) => {
-          // manejo de comas dentro de comillas
-          const columnas = fila.match(/(".*?"|[^",\r]+|(?<=,)(?=,)|^(?=,)|(?<=,)$)/g) || fila.split(",");
-          const limpiar  = s => s ? s.replace(/^"|"$/g, "").trim() : "";
-
-          const titulo = limpiar(columnas[0]);
-          const link   = limpiar(columnas[1]);
-          const activo = limpiar(columnas[2]);
-
-          if (!titulo || !link || activo !== "TRUE") return;
-
-          const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(link);
-
-          const tarjeta = document.createElement("div");
-          tarjeta.className = "tarjeta";
-          tarjeta.style.animationDelay = `${agregados * 80}ms`;
-
-          tarjeta.innerHTML = `
-            <span class="tarjeta-titulo">${titulo}</span>
-            <img class="tarjeta-qr" src="${qrUrl}" alt="QR ${titulo}" loading="lazy">
-            <a class="tarjeta-btn" href="${link}" target="_blank" rel="noopener">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
-              </svg>
-              Abrir enlace
-            </a>
-          `;
-
-          contenedor.appendChild(tarjeta);
-          agregados++;
-        });
-
-        if (agregados === 0) {
-          estado.style.display = "block";
-          estado.innerHTML = "<p>No se encontraron enlaces activos.</p>";
+        if (dentroComillas) {
+          if (c === '"' && sig === '"') { campo += '"'; i++; }       // "" → "
+          else if (c === '"')           { dentroComillas = false; }  // cierre
+          else                          { campo += c; }
+        } else {
+          if      (c === '"')  { dentroComillas = true; }
+          else if (c === ',')  { fila.push(campo.trim()); campo = ""; }
+          else if (c === '\n' || (c === '\r' && sig === '\n')) {
+            if (c === '\r') i++;
+            fila.push(campo.trim());
+            if (fila.some(x => x !== "")) filas.push(fila); // ignorar filas vacías
+            fila = []; campo = "";
+          } else { campo += c; }
         }
-      })
-      .catch(err => {
-        estado.style.display = "block";
-        estado.innerHTML = `<p>⚠️ ${err.message}</p>`;
+      }
+      // última fila sin salto final
+      if (campo || fila.length) { fila.push(campo.trim()); if (fila.some(x => x !== "")) filas.push(fila); }
+
+      return filas;
+    }
+
+    // ── Barra de progreso ─────────────────────────────────────────────────────
+    function iniciarBarra() {
+      barraProgreso.style.transition = "none";
+      barraProgreso.style.width = "0%";
+      barraProgreso.getBoundingClientRect();
+      barraProgreso.style.transition = `width ${INTERVALO_MS}ms linear`;
+      barraProgreso.style.width = "100%";
+    }
+
+    function horaActual() {
+      return new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function pulsarDot() {
+      refreshDot.classList.remove("pulsing");
+      void refreshDot.offsetWidth;
+      refreshDot.classList.add("pulsing");
+    }
+
+    // ── Render ────────────────────────────────────────────────────────────────
+    function renderizarTarjetas(filas) {
+      let agregados = 0;
+      const fragment = document.createDocumentFragment();
+
+      filas.forEach(cols => {
+        const titulo = cols[0] || "";
+        const link   = cols[1] || "";
+        const activo = (cols[2] || "").toUpperCase();
+
+        if (!titulo || !link || (activo !== "TRUE" && activo !== "VERDADERO" && activo !== "1")) return;
+
+        const qrUrl  = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(link);
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "tarjeta";
+        tarjeta.style.animationDelay = `${agregados * 80}ms`;
+
+        tarjeta.innerHTML = `
+          <span class="tarjeta-titulo">${titulo}</span>
+          <img class="tarjeta-qr" src="${qrUrl}" alt="QR ${titulo}" loading="lazy">
+          <a class="tarjeta-btn" href="${link}" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Abrir enlace
+          </a>
+        `;
+
+        fragment.appendChild(tarjeta);
+        agregados++;
       });
+
+      return { fragment, agregados };
+    }
+
+    // ── Fetch ─────────────────────────────────────────────────────────────────
+    function cargarDatos(esPrimeraCarga = false) {
+      if (esPrimeraCarga) {
+        estado.style.display = "block";
+        estado.innerHTML = '<div class="spinner"></div>Cargando recursos…';
+      }
+
+      fetch(sheetCSV + "&t=" + Date.now())
+        .then(res => {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.text();
+        })
+        .then(texto => {
+          // mostrar primeras 3 filas en debug (activar con ?debug en la URL)
+          if (location.search.includes("debug")) {
+            debug.style.display = "block";
+            const lineas = texto.split("\n").slice(0, 3);
+            debug.textContent = "CSV (primeras 3 filas):\n" + lineas.map((l,i)=>`[${i}] ${l}`).join("\n");
+          }
+
+          const filas = parsearCSV(texto);
+          const { fragment, agregados } = renderizarTarjetas(filas);
+          const actuales = contenedor.querySelectorAll(".tarjeta").length;
+
+          if (esPrimeraCarga || agregados !== actuales) {
+            contenedor.innerHTML = "";
+            if (agregados > 0) contenedor.appendChild(fragment);
+          }
+
+          estado.style.display = "none";
+
+          if (agregados === 0) {
+            estado.style.display = "block";
+            estado.innerHTML = "<p>No hay enlaces activos (checkbox tildado).</p>";
+          }
+
+          pulsarDot();
+          refreshLabel.textContent = "Actualizado " + horaActual();
+          iniciarBarra();
+        })
+        .catch(err => {
+          if (esPrimeraCarga) {
+            estado.style.display = "block";
+            estado.innerHTML = `<p>⚠️ ${err.message}</p>`;
+          }
+          refreshLabel.textContent = "⚠️ Sin conexión · " + horaActual();
+        });
+    }
+
+    cargarDatos(true);
+    setInterval(() => cargarDatos(false), INTERVALO_MS);
   </script>
 
 </body>
