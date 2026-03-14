@@ -15,10 +15,6 @@ margin:0;
 padding:0;
 }
 
-h1{
-margin-top:30px;
-}
-
 .logo{
 margin:20px;
 border-radius:10px;
@@ -42,12 +38,6 @@ width:220px;
 
 .tarjeta img{
 margin-top:10px;
-}
-
-.tarjeta a{
-text-decoration:none;
-color:#0077cc;
-font-weight:bold;
 }
 
 </style>
@@ -77,13 +67,13 @@ filas.slice(1).forEach(fila => {
 
 let columnas = fila.split(",");
 
-if(columnas.length < 2) return;
+if(columnas.length < 3) return;
 
 let titulo = columnas[0].replace(/"/g,"").trim();
 let link = columnas[1].replace(/"/g,"").trim();
-let activo = columnas[2] ? columnas[2].replace(/"/g,"").trim().toLowerCase() : "true";
+let activo = columnas[2].replace(/"/g,"").trim();
 
-if(activo === "true" || activo === "verdadero" || activo === "1"){
+if(activo === "TRUE"){
 
 let qr = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(link);
 
