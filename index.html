@@ -17,7 +17,7 @@
       --accent: #c85a2a;
       --card-bg: #ffffff;
       --border: #e2dfd8;
-      --header-h: 280px;
+      --header-h: 200px;
     }
 
     body {
@@ -28,32 +28,35 @@
       padding-top: var(--header-h);
     }
 
+    /* ══════════════════════════════════════
+       HEADER FIJO
+    ══════════════════════════════════════ */
     header {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
-      position: relative;
-      width: 100%;
       height: var(--header-h);
       background: var(--ink);
       overflow: hidden;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      padding: 0 48px;
     }
 
+    /* textura diagonal sutil */
     header::before {
       content: '';
       position: absolute;
       inset: 0;
+      pointer-events: none;
       background: repeating-linear-gradient(
         45deg, transparent, transparent 40px,
-        rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px
+        rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 80px
       );
     }
 
+    /* franja naranja izquierda */
     header::after {
       content: '';
       position: absolute;
@@ -62,27 +65,27 @@
       background: var(--accent);
     }
 
-    .header-inner {
+    /* ── Lado izquierdo: avatar + título ── */
+    .header-brand {
       position: relative;
       z-index: 1;
       display: flex;
       align-items: center;
-      gap: 32px;
-      padding: 0 48px;
+      gap: 24px;
       animation: fadeDown 0.7s ease both;
     }
 
     .header-avatar {
-      width: 110px; height: 110px;
+      width: 90px; height: 90px;
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid var(--accent);
       flex-shrink: 0;
-      box-shadow: 0 0 0 6px rgba(200,90,42,0.15);
+      box-shadow: 0 0 0 5px rgba(200,90,42,0.15);
     }
 
     .header-avatar-placeholder {
-      width: 110px; height: 110px;
+      width: 90px; height: 90px;
       border-radius: 50%;
       border: 3px solid var(--accent);
       flex-shrink: 0;
@@ -90,12 +93,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 42px;
+      font-size: 36px;
+      box-shadow: 0 0 0 5px rgba(200,90,42,0.15);
     }
 
     .header-text h1 {
       font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
       color: #fff;
       line-height: 1;
       letter-spacing: -0.02em;
@@ -104,52 +108,117 @@
     .header-text h1 em { color: var(--accent); font-style: italic; }
 
     .header-text p {
-      margin-top: 8px;
-      font-size: 0.875rem;
+      margin-top: 6px;
+      font-size: 0.78rem;
       font-weight: 300;
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
-    .header-refresh {
+    /* ── Lado derecho: widget de countdown ── */
+    .header-countdown {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      animation: fadeDown 0.7s ease 0.15s both;
+    }
+
+    /* círculo SVG con countdown */
+    .countdown-ring {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+    }
+
+    .countdown-ring svg {
+      width: 72px; height: 72px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-track {
+      fill: none;
+      stroke: rgba(255,255,255,0.08);
+      stroke-width: 4;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 188.5; /* 2π×30 */
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+    }
+
+    .countdown-num {
       position: absolute;
-      bottom: 16px; right: 24px;
+      inset: 0;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.72rem;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: -0.03em;
+    }
+
+    /* estado debajo del anillo */
+    .countdown-label {
+      font-size: 0.68rem;
+      font-weight: 300;
       color: rgba(255,255,255,0.35);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.4;
     }
 
-    .refresh-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      opacity: 0.5;
+    .countdown-label strong {
+      display: block;
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
+      font-size: 0.72rem;
     }
 
-    .refresh-dot.pulsing { animation: pulse-dot 1s ease-out; }
+    /* pulso al actualizar */
+    @keyframes flash-ring {
+      0%   { stroke: #fff; opacity: 1; }
+      100% { stroke: var(--accent); opacity: 1; }
+    }
 
-    .refresh-bar {
+    .ring-fill.flashing {
+      animation: flash-ring 0.4s ease;
+    }
+
+    /* ── Barra inferior del header ── */
+    .header-bar {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: rgba(255,255,255,0.06);
+      height: 3px;
+      background: rgba(255,255,255,0.05);
     }
 
-    .refresh-bar-fill {
+    .header-bar-fill {
       height: 100%;
       background: var(--accent);
-      width: 0%;
-      opacity: 0.6;
+      width: 100%;
+      opacity: 0.7;
+      transform-origin: left;
     }
 
+    /* ══════════════════════════════════════
+       MAIN
+    ══════════════════════════════════════ */
     main {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 48px 24px 80px;
+      padding: 40px 24px 80px;
     }
 
     #estado {
@@ -171,7 +240,7 @@
 
     #lista {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 24px;
     }
 
@@ -246,7 +315,6 @@
       border-top: 1px solid var(--border);
     }
 
-    /* debug panel */
     #debug {
       display: none;
       background: #1a1814;
@@ -256,25 +324,38 @@
       padding: 16px 24px;
       white-space: pre-wrap;
       word-break: break-all;
-      max-height: 200px;
-      overflow-y: auto;
     }
 
-    @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+    /* ══════════════════════════════════════
+       ANIMACIONES
+    ══════════════════════════════════════ */
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeUp   { to   { opacity:1; transform:translateY(0); } }
     @keyframes spin     { to   { transform:rotate(360deg); } }
-    @keyframes pulse-dot { 0% { opacity:1; transform:scale(1.8); } 100% { opacity:0.5; transform:scale(1); } }
 
-    @media (max-width: 520px) {
-      .header-inner { flex-direction:column; text-align:center; gap:16px; padding:0 24px; }
-      :root { --header-h: 320px; }
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 600px) {
+      :root { --header-h: 160px; }
+      header { padding: 0 20px; }
+      .header-avatar, .header-avatar-placeholder { width: 64px; height: 64px; font-size: 26px; }
+      .header-brand { gap: 14px; }
+      .countdown-ring, .countdown-ring svg { width: 56px; height: 56px; }
+      .countdown-num { font-size: 1rem; }
+      .ring-fill { stroke-dasharray: 145; } /* 2π×23 */
+    }
+
+    @media (max-width: 400px) {
+      .countdown-label { display: none; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="header-inner">
+    <!-- MARCA: avatar + título -->
+    <div class="header-brand">
       <img
         class="header-avatar"
         src="image.jpg"
@@ -286,12 +367,25 @@
         <p>Recursos y herramientas digitales</p>
       </div>
     </div>
-    <div class="refresh-bar">
-      <div class="refresh-bar-fill" id="barraProgreso"></div>
+
+    <!-- COUNTDOWN: anillo + segundos -->
+    <div class="header-countdown">
+      <div class="countdown-ring">
+        <svg viewBox="0 0 72 72">
+          <circle class="ring-track" cx="36" cy="36" r="30"/>
+          <circle class="ring-fill" id="ringFill" cx="36" cy="36" r="30"/>
+        </svg>
+        <div class="countdown-num" id="countdownNum">60</div>
+      </div>
+      <div class="countdown-label">
+        <strong id="refreshLabel">Cargando…</strong>
+        próxima actualización
+      </div>
     </div>
-    <div class="header-refresh">
-      <div class="refresh-dot" id="refreshDot"></div>
-      <span id="refreshLabel">Cargando…</span>
+
+    <!-- barra de progreso inferior -->
+    <div class="header-bar">
+      <div class="header-bar-fill" id="barraFill"></div>
     </div>
   </header>
 
@@ -306,33 +400,72 @@
   </main>
 
   <footer>
-    Actualizado automáticamente desde Google Sheets · cada 1 minuto
+    Sincronizado con Google Sheets · refresco automático cada 60 s
   </footer>
 
   <script>
     const sheetCSV     = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyIiVfVXUrDd9siaOe8XwKpAwjQToL8M7gq98sFQqH7vp0-Cr4ulaFYwz2-kvWOeDEzE1Nb98qKCy8/pub?output=csv";
-    const INTERVALO_MS = 60 * 1000;
+    const TOTAL_SEG    = 60;
 
     const estado        = document.getElementById("estado");
     const contenedor    = document.getElementById("lista");
-    const refreshDot    = document.getElementById("refreshDot");
     const refreshLabel  = document.getElementById("refreshLabel");
-    const barraProgreso = document.getElementById("barraProgreso");
+    const countdownNum  = document.getElementById("countdownNum");
+    const ringFill      = document.getElementById("ringFill");
+    const barraFill     = document.getElementById("barraFill");
     const debug         = document.getElementById("debug");
 
+    const CIRCUNF       = 2 * Math.PI * 30; // ≈ 188.5
+
+    let segundosRestantes = TOTAL_SEG;
+    let timerCuenta       = null;
+
+    // ── Countdown por segundos ────────────────────────────────────────────────
+    function iniciarCountdown() {
+      clearInterval(timerCuenta);
+      segundosRestantes = TOTAL_SEG;
+      actualizarAnillo(TOTAL_SEG);
+
+      timerCuenta = setInterval(() => {
+        segundosRestantes--;
+        if (segundosRestantes < 0) segundosRestantes = 0;
+        actualizarAnillo(segundosRestantes);
+      }, 1000);
+    }
+
+    function actualizarAnillo(seg) {
+      countdownNum.textContent = seg;
+      // dashoffset: 0 = lleno, CIRCUNF = vacío
+      const progreso = seg / TOTAL_SEG; // 1 → 0
+      ringFill.style.strokeDashoffset = CIRCUNF * (1 - progreso);
+
+      // barra inferior: shrinks con el tiempo
+      barraFill.style.transform = `scaleX(${progreso})`;
+      barraFill.style.transition = "transform 1s linear";
+    }
+
+    function flashAnillo() {
+      ringFill.classList.remove("flashing");
+      void ringFill.offsetWidth;
+      ringFill.classList.add("flashing");
+    }
+
+    function horaActual() {
+      return new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+    }
+
     // ── Parser CSV robusto (RFC 4180) ─────────────────────────────────────────
-    // Maneja: comas dentro de comillas, saltos de línea, comillas escapadas
     function parsearCSV(texto) {
       const filas = [];
       let fila = [], campo = "", dentroComillas = false;
 
       for (let i = 0; i < texto.length; i++) {
-        const c  = texto[i];
+        const c   = texto[i];
         const sig = texto[i + 1];
 
         if (dentroComillas) {
-          if (c === '"' && sig === '"') { campo += '"'; i++; }       // "" → "
-          else if (c === '"')           { dentroComillas = false; }  // cierre
+          if (c === '"' && sig === '"') { campo += '"'; i++; }
+          else if (c === '"')           { dentroComillas = false; }
           else                          { campo += c; }
         } else {
           if      (c === '"')  { dentroComillas = true; }
@@ -340,37 +473,19 @@
           else if (c === '\n' || (c === '\r' && sig === '\n')) {
             if (c === '\r') i++;
             fila.push(campo.trim());
-            if (fila.some(x => x !== "")) filas.push(fila); // ignorar filas vacías
+            if (fila.some(x => x !== "")) filas.push(fila);
             fila = []; campo = "";
           } else { campo += c; }
         }
       }
-      // última fila sin salto final
-      if (campo || fila.length) { fila.push(campo.trim()); if (fila.some(x => x !== "")) filas.push(fila); }
-
+      if (campo || fila.length) {
+        fila.push(campo.trim());
+        if (fila.some(x => x !== "")) filas.push(fila);
+      }
       return filas;
     }
 
-    // ── Barra de progreso ─────────────────────────────────────────────────────
-    function iniciarBarra() {
-      barraProgreso.style.transition = "none";
-      barraProgreso.style.width = "0%";
-      barraProgreso.getBoundingClientRect();
-      barraProgreso.style.transition = `width ${INTERVALO_MS}ms linear`;
-      barraProgreso.style.width = "100%";
-    }
-
-    function horaActual() {
-      return new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
-    }
-
-    function pulsarDot() {
-      refreshDot.classList.remove("pulsing");
-      void refreshDot.offsetWidth;
-      refreshDot.classList.add("pulsing");
-    }
-
-    // ── Render ────────────────────────────────────────────────────────────────
+    // ── Render tarjetas ───────────────────────────────────────────────────────
     function renderizarTarjetas(filas) {
       let agregados = 0;
       const fragment = document.createDocumentFragment();
@@ -382,7 +497,7 @@
 
         if (!titulo || !link || (activo !== "TRUE" && activo !== "VERDADERO" && activo !== "1")) return;
 
-        const qrUrl  = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(link);
+        const qrUrl   = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(link);
         const tarjeta = document.createElement("div");
         tarjeta.className = "tarjeta";
         tarjeta.style.animationDelay = `${agregados * 80}ms`;
@@ -420,11 +535,9 @@
           return res.text();
         })
         .then(texto => {
-          // mostrar primeras 3 filas en debug (activar con ?debug en la URL)
           if (location.search.includes("debug")) {
             debug.style.display = "block";
-            const lineas = texto.split("\n").slice(0, 3);
-            debug.textContent = "CSV (primeras 3 filas):\n" + lineas.map((l,i)=>`[${i}] ${l}`).join("\n");
+            debug.textContent = "CSV:\n" + texto.split("\n").slice(0,5).map((l,i)=>`[${i}] ${l}`).join("\n");
           }
 
           const filas = parsearCSV(texto);
@@ -440,24 +553,25 @@
 
           if (agregados === 0) {
             estado.style.display = "block";
-            estado.innerHTML = "<p>No hay enlaces activos (checkbox tildado).</p>";
+            estado.innerHTML = "<p>No hay enlaces activos.<br><small>Tildá un checkbox en Google Sheets.</small></p>";
           }
 
-          pulsarDot();
-          refreshLabel.textContent = "Actualizado " + horaActual();
-          iniciarBarra();
+          flashAnillo();
+          refreshLabel.textContent = horaActual();
+          iniciarCountdown();
         })
         .catch(err => {
           if (esPrimeraCarga) {
             estado.style.display = "block";
             estado.innerHTML = `<p>⚠️ ${err.message}</p>`;
           }
-          refreshLabel.textContent = "⚠️ Sin conexión · " + horaActual();
+          refreshLabel.textContent = "⚠️ error";
         });
     }
 
+    // ── Arrancar ──────────────────────────────────────────────────────────────
     cargarDatos(true);
-    setInterval(() => cargarDatos(false), INTERVALO_MS);
+    setInterval(() => cargarDatos(false), TOTAL_SEG * 1000);
   </script>
 
 </body>
