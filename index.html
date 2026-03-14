@@ -82,7 +82,7 @@ const link = columnas[1];
 
 if(titulo && link){
 
-const qr = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(link);
+const qr = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(link);
 
 contenedor.innerHTML += `
 <div class="tarjeta">
@@ -107,5 +107,4 @@ contenedor.innerHTML += `
 </script>
 
 </body>
-
 </html>
