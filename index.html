@@ -6,42 +6,50 @@
 <title>Mis enlaces</title>
 
 <style>
+
 body{
-    font-family: Arial, sans-serif;
-    text-align:center;
-    background:#f4f4f4;
+font-family: Arial, sans-serif;
+background:#f4f4f4;
+text-align:center;
+margin:0;
+padding:0;
 }
 
 h1{
-    margin-top:30px;
+margin-top:30px;
 }
 
-img{
-    margin:20px;
-    border-radius:10px;
+img.logo{
+margin:20px;
+border-radius:10px;
 }
 
-ul{
-    list-style:none;
-    padding:0;
+#lista{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:25px;
+padding:20px;
 }
 
-li{
-    margin:10px;
+.tarjeta{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+width:200px;
 }
 
-a{
-    text-decoration:none;
-    font-size:18px;
-    color:white;
-    background:#0077cc;
-    padding:10px 20px;
-    border-radius:8px;
+.tarjeta img{
+margin-top:10px;
 }
 
-a:hover{
-    background:#005fa3;
+.tarjeta a{
+text-decoration:none;
+color:#0077cc;
+font-weight:bold;
 }
+
 </style>
 
 </head>
@@ -50,41 +58,54 @@ a:hover{
 
 <h1>Mis enlaces</h1>
 
-<img src="image.jpg" width="300">
+<img src="image.jpg" width="300" class="logo">
 
-<ul id="lista"></ul>
+<div id="lista"></div>
 
 <script>
 
-const url = "https://docs.google.com/spreadsheets/d/1rYgE9eltlWUaCED98TPYKmgVCYHoLhRZ8CG2WgSvtT0/export?format=csv";
+const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyIiVfVXUrDd9siaOe8XwKpAwjQToL8M7gq98sFQqH7vp0-Cr4ulaFYwz2-kvWOeDEzE1Nb98qKCy8/pub?output=csv";
 
 fetch(url)
-  .then(res => res.text())
-  .then(data => {
+.then(res => res.text())
+.then(data => {
 
-    const filas = data.split("\n");
-    const lista = document.getElementById("lista");
+const filas = data.trim().split("\n");
+const contenedor = document.getElementById("lista");
 
-    filas.slice(1).forEach(fila => {
+filas.slice(1).forEach(fila => {
 
-      const columnas = fila.split(",");
+const columnas = fila.split(",");
 
-      const titulo = columnas[0];
-      const link = columnas[1];
+const titulo = columnas[0];
+const link = columnas[1];
 
-      if(titulo && link){
-        lista.innerHTML += `
-        <li>
-            <a href="${link}" target="_blank">${titulo}</a>
-        </li>
-        `;
-      }
+if(titulo && link){
 
-    });
+const qr = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(link);
 
-  });
+contenedor.innerHTML += `
+<div class="tarjeta">
+
+<h3>${titulo}</h3>
+
+<a href="${link}" target="_blank">Abrir enlace</a>
+
+<br><br>
+
+<img src="${qr}" width="150">
+
+</div>
+`;
+
+}
+
+});
+
+});
 
 </script>
 
 </body>
+
 </html>
